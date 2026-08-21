@@ -1,8 +1,8 @@
 import React from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import { LayoutDashboard, Receipt, Tags, Sun, Moon } from 'lucide-react';
-import { useAppContext } from '../../context/AppContext';
-import { ToastContainer } from '../common/Toast';
+import { useAppContext } from '../context/AppContext';
+import { ToastContainer } from '../components/common/Toast';
 import './MainLayout.css';
 
 export const MainLayout = () => {
