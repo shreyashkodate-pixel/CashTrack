@@ -10,7 +10,7 @@ import { EmptyState } from '../components/common/EmptyState';
 import { ExpenseForm } from '../components/expense/ExpenseForm';
 import { useAppContext } from '../context/AppContext';
 import { expenseService } from '../services/expenseService';
-import { Plus, Edit2, Trash2, Search, FilterX, Receipt } from 'lucide-react';
+import { Plus, Edit2, Trash2, FilterX, Receipt } from 'lucide-react';
 import { format } from 'date-fns';
 import './Expenses.css';
 
@@ -155,7 +155,7 @@ export const Expenses = () => {
                 <th>Date</th>
                 <th>Title</th>
                 <th>Category</th>
-                <th style={{ textAlign: 'right' }}>Amount</th>
+                <th className="text-right">Amount</th>
                 <th className="action-cell">Actions</th>
               </tr>
             </thead>
@@ -171,11 +171,11 @@ export const Expenses = () => {
                 filteredExpenses.map((expense) => (
                   <tr key={expense.id}>
                     <td>{format(new Date(expense.expenseDate), 'MMM dd, yyyy')}</td>
-                    <td style={{ fontWeight: 500 }}>{expense.title}</td>
+                    <td className="font-medium">{expense.title}</td>
                     <td>
                       <span className="delta-chip neutral">{expense.categoryName}</span>
                     </td>
-                    <td style={{ textAlign: 'right' }} className="numeric">
+                    <td className="text-right numeric">
                       ₹{expense.amount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </td>
                     <td className="action-cell">
@@ -203,7 +203,7 @@ export const Expenses = () => {
           </table>
 
           {!loading && filteredExpenses.length === 0 && (
-            <div style={{ padding: 'var(--space-6)' }}>
+            <div className="empty-state-wrapper">
               <EmptyState 
                 icon={Receipt}
                 title={hasActiveFilters ? "No matching expenses" : "No expenses recorded"}

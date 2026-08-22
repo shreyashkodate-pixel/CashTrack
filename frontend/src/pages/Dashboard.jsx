@@ -4,7 +4,7 @@ import { useExpenses } from '../hooks/useExpenses';
 import { useCategories } from '../hooks/useCategories';
 import { MetricCardSkeleton, Skeleton } from '../components/common/Skeleton';
 import { EmptyState } from '../components/common/EmptyState';
-import { IndianRupee, ArrowDownRight, Layers, CreditCard, PieChart, Receipt } from 'lucide-react';
+import { ArrowDownRight, Layers, CreditCard, PieChart, Receipt } from 'lucide-react';
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
 import './Dashboard.css';
@@ -23,7 +23,6 @@ export const Dashboard = () => {
 
   const sortedCategories = Object.entries(categoryTotals).sort((a, b) => b[1] - a[1]);
   const topCategoryName = sortedCategories.length > 0 ? sortedCategories[0][0] : 'None';
-  const highestExpense = expenses.reduce((max, exp) => Math.max(max, exp.amount), 0);
 
   const totalAmount = summary.totalAmount || 0;
   const totalCount = summary.totalCount || 0;
@@ -88,7 +87,7 @@ export const Dashboard = () => {
                 </div>
               </div>
               <div className="card-metric-body">
-                <span className="metric-value" style={{ fontSize: '22px' }}>
+                <span className="metric-value metric-value-sm">
                   {topCategoryName}
                 </span>
                 <div className="card-metric-footer">
@@ -125,7 +124,7 @@ export const Dashboard = () => {
           />
           <CardBody>
             {loading ? (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <div className="stack-gap-4">
                 <Skeleton height="24px" />
                 <Skeleton height="24px" />
                 <Skeleton height="24px" />
@@ -167,11 +166,11 @@ export const Dashboard = () => {
           <CardHeader 
             title="Recent Expenses" 
             description="Latest transactions recorded"
-            action={<Link to="/expenses" style={{ fontSize: '13px', fontWeight: 500 }}>View all →</Link>}
+            action={<Link to="/expenses" className="link-action">View all →</Link>}
           />
           <CardBody>
             {loading ? (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              <div className="stack-gap-4">
                 <Skeleton height="20px" />
                 <Skeleton height="20px" />
                 <Skeleton height="20px" />

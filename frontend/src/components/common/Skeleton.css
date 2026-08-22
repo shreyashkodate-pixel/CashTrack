@@ -32,7 +32,30 @@
   justify-content: space-between;
 }
 
-.skeleton-table-row {
-  height: 48px;
-  border-bottom: 1px solid var(--border);
+.skeleton-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.skeleton-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+.skeleton-table-cell {
+  padding: 14px 16px;
+}
+
+.skeleton-category-card {
+  height: 72px;
+}
+
+.skeleton-category-inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
 }

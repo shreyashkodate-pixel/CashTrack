@@ -25,11 +25,11 @@ export const Skeleton = ({
 
 export const MetricCardSkeleton = () => (
   <div className="skeleton-card">
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+    <div className="skeleton-card-header">
       <Skeleton width="40%" height="12px" />
       <Skeleton width="28px" height="28px" circle />
     </div>
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '12px' }}>
+    <div className="skeleton-card-body">
       <Skeleton width="60%" height="28px" />
       <Skeleton width="35%" height="12px" />
     </div>
@@ -39,7 +39,7 @@ export const MetricCardSkeleton = () => (
 export const TableRowSkeleton = ({ columns = 5 }) => (
   <tr>
     {Array.from({ length: columns }).map((_, i) => (
-      <td key={i} style={{ padding: '14px 16px' }}>
+      <td key={i} className="skeleton-table-cell">
         <Skeleton width={i === 0 ? '70%' : i === 1 ? '90%' : '50%'} height="14px" />
       </td>
     ))}

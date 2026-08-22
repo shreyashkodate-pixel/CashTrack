@@ -84,7 +84,7 @@ export const ExpenseForm = ({ isOpen, onClose, initialData, onSuccess }) => {
       onClose={onClose} 
       title={initialData ? 'Edit Expense' : 'Add Expense'}
     >
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+      <form onSubmit={handleSubmit} className="modal-form">
         <Input 
           label="Title" 
           name="title"
@@ -94,7 +94,7 @@ export const ExpenseForm = ({ isOpen, onClose, initialData, onSuccess }) => {
           required 
           autoFocus
         />
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+        <div className="form-grid-2">
           <Input 
             label="Amount (₹)" 
             name="amount"
@@ -123,7 +123,7 @@ export const ExpenseForm = ({ isOpen, onClose, initialData, onSuccess }) => {
           options={categoryOptions}
           required
         />
-        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px', marginTop: '8px' }}>
+        <div className="form-actions">
           <Button type="button" variant="ghost" onClick={onClose}>Cancel</Button>
           <Button type="submit" disabled={loading}>
             {loading ? 'Saving...' : 'Save'}

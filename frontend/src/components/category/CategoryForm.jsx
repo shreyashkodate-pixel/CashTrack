@@ -45,7 +45,7 @@ export const CategoryForm = ({ isOpen, onClose, initialData, onSuccess }) => {
       onClose={onClose} 
       title={initialData ? 'Edit Category' : 'Add Category'}
     >
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+      <form onSubmit={handleSubmit} className="modal-form">
         <Input 
           label="Category Name" 
           value={name} 
@@ -54,7 +54,7 @@ export const CategoryForm = ({ isOpen, onClose, initialData, onSuccess }) => {
           required 
           autoFocus
         />
-        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px', marginTop: '8px' }}>
+        <div className="form-actions">
           <Button type="button" variant="ghost" onClick={onClose}>Cancel</Button>
           <Button type="submit" disabled={loading || !name.trim()}>
             {loading ? 'Saving...' : 'Save'}

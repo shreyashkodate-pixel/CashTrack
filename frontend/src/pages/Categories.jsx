@@ -57,8 +57,8 @@ export const Categories = () => {
       {loading ? (
         <div className="categories-grid">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="category-card" style={{ height: '72px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', width: '100%' }}>
+            <div key={i} className="category-card skeleton-category-card">
+              <div className="skeleton-category-inner">
                 <Skeleton width="36px" height="36px" circle />
                 <Skeleton width="50%" height="16px" />
               </div>
