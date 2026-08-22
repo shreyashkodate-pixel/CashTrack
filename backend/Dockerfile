@@ -1,26 +1,23 @@
-# Build stage
+# ─── Build stage ─────────────────────────────────────────────────────────────
 FROM eclipse-temurin:21-jdk-alpine AS build
 WORKDIR /workspace
 
-# Copy pom.xml and download dependencies first (layer cache)
-COPY backend/pom.xml .
-RUN --mount=type=cache,target=/root/.m2 true
+# Copy pom.xml first so Maven dependency layer can be cached
+COPY pom.xml .
 
-# Copy source and migrations
-COPY backend/src ./src
-COPY database/migrations /app/migrations
+# Copy source (migrations are bundled inside src/main/resources/db/migration)
+COPY src ./src
 
-# Build the JAR
-RUN ./mvnw -o package -DskipTests 2>/dev/null || (apt-get install -y maven 2>/dev/null; mvn package -DskipTests)
+# Build the JAR, skipping tests for faster CI builds
+RUN mvn package -DskipTests -B --no-transfer-progress
 
-# ─────────────────────────────────────────────
-# Runtime stage
+# ─── Runtime stage ───────────────────────────────────────────────────────────
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
-# Copy migrations and JAR
-COPY --from=build /app/migrations /app/migrations
+# Copy the built JAR only — migrations are baked into the classpath
 COPY --from=build /workspace/target/*.jar app.jar
 
 EXPOSE 8080
+
 ENTRYPOINT ["java", "-jar", "app.jar"]
