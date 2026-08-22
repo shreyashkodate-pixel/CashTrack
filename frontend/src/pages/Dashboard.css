@@ -1,60 +1,100 @@
-.page-container {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-8, 32px);
-}
-
-.page-header {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.page-header h1 {
-  margin: 0;
-}
-
-.page-header .subtitle {
-  color: var(--muted-foreground);
-  font-size: 14px;
-}
-
-.metric-row {
+.metric-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: var(--space-6, 24px);
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--space-6);
 }
 
-.metric-card {
-  gap: var(--space-2, 8px);
+.dashboard-sections-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
 }
 
-.metric-header {
+@media (min-width: 1024px) {
+  .dashboard-sections-grid {
+    grid-template-columns: 7fr 5fr;
+  }
+}
+
+.breakdown-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.breakdown-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.breakdown-item-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-size: 13px;
 }
 
-.icon-wrapper {
-  padding: 8px;
+.breakdown-category-name {
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+.breakdown-category-amount {
+  font-family: 'Geist Mono', monospace;
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+.breakdown-bar-bg {
+  height: 6px;
+  background-color: var(--muted);
   border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.breakdown-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), color-mix(in oklab, var(--primary) 70%, var(--accent)));
+  border-radius: var(--radius-full);
+  transition: width var(--dur-slow) var(--ease-out);
+}
+
+.recent-expense-item {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--border);
 }
 
-.icon-wrapper.error {
-  background-color: color-mix(in oklab, var(--destructive) 10%, transparent);
-  color: var(--destructive);
+.recent-expense-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
 }
 
-.metric-content {
+.recent-expense-info {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
 }
 
-.metric-meta {
-  font-size: 13px;
+.recent-expense-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+.recent-expense-date {
+  font-size: 12px;
   color: var(--muted-foreground);
+}
+
+.recent-expense-amount {
+  font-family: 'Geist Mono', monospace;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--foreground);
 }

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useCategories } from '../hooks/useCategories';
-import { Card } from '../components/common/Card';
 import { Button } from '../components/common/Button';
-import { Plus, Edit2, Trash2 } from 'lucide-react';
+import { Skeleton } from '../components/common/Skeleton';
+import { EmptyState } from '../components/common/EmptyState';
 import { CategoryForm } from '../components/category/CategoryForm';
 import { useAppContext } from '../context/AppContext';
 import { categoryService } from '../services/categoryService';
+import { Plus, Edit2, Trash2, Tags, Tag } from 'lucide-react';
 import './Categories.css';
 
 export const Categories = () => {
@@ -25,7 +26,7 @@ export const Categories = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this category?')) return;
+    if (!window.confirm('Are you sure you want to delete this category? Any associated expenses may prevent deletion.')) return;
     try {
       await categoryService.delete(id);
       addToast('Category deleted successfully', 'success');
@@ -42,52 +43,67 @@ export const Categories = () => {
 
   return (
     <div className="page-container">
-      <header className="page-header flex-between">
-        <div>
+      <header className="page-header">
+        <div className="page-header-text">
           <h1>Categories</h1>
-          <p className="subtitle">Manage your expense categories</p>
+          <p className="page-subtitle">Manage and organize your custom expense categories</p>
         </div>
-        <Button onClick={handleAdd}>
-          <Plus size={18} />
-          Add Category
+        <Button onClick={handleAdd} variant="primary">
+          <Plus size={16} />
+          <span>Add Category</span>
         </Button>
       </header>
 
       {loading ? (
-        <div>Loading categories...</div>
+        <div className="categories-grid">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="category-card" style={{ height: '72px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', width: '100%' }}>
+                <Skeleton width="36px" height="36px" circle />
+                <Skeleton width="50%" height="16px" />
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : categories.length > 0 ? (
+        <div className="categories-grid">
+          {categories.map((category) => (
+            <div key={category.id} className="category-card">
+              <div className="category-badge-wrapper">
+                <div className="category-icon-bubble">
+                  <Tag size={18} />
+                </div>
+                <span className="category-name-text">{category.name}</span>
+              </div>
+              <div className="category-actions">
+                <button 
+                  className="icon-btn edit-btn" 
+                  onClick={() => handleEdit(category)}
+                  title="Edit category"
+                  aria-label="Edit category"
+                >
+                  <Edit2 size={16} />
+                </button>
+                <button 
+                  className="icon-btn delete-btn" 
+                  onClick={() => handleDelete(category.id)}
+                  title="Delete category"
+                  aria-label="Delete category"
+                >
+                  <Trash2 size={16} />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
       ) : (
-        <Card className="table-card">
-          <div className="table-container">
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th className="action-cell">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {categories.map((category) => (
-                  <tr key={category.id}>
-                    <td>{category.name}</td>
-                    <td className="action-cell">
-                      <button className="icon-btn edit-btn" onClick={() => handleEdit(category)}>
-                        <Edit2 size={16} />
-                      </button>
-                      <button className="icon-btn delete-btn" onClick={() => handleDelete(category.id)}>
-                        <Trash2 size={16} />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-                {categories.length === 0 && (
-                  <tr>
-                    <td colSpan="2" className="empty-state">No categories found.</td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-        </Card>
+        <EmptyState 
+          icon={Tags}
+          title="No categories found"
+          description="Create your first category to start organizing your transactions."
+          actionLabel="Add Category"
+          onAction={handleAdd}
+        />
       )}
 
       <CategoryForm 

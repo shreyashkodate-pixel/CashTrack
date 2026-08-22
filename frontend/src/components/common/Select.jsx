@@ -1,20 +1,34 @@
-import React, { forwardRef } from 'react';
+import React from 'react';
+import './Input.css';
+import './Select.css';
 
-export const Select = forwardRef(({ label, error, options = [], className = '', ...props }, ref) => {
+export const Select = ({
+  label,
+  options = [],
+  error,
+  placeholder = 'Select an option',
+  className = '',
+  id,
+  ...props
+}) => {
+  const selectId = id || (label ? label.toLowerCase().replace(/\s+/g, '-') : undefined);
+
   return (
-    <div className={`input-wrapper ${className}`}>
-      {label && <label className="input-label">{label}</label>}
-      <select 
-        ref={ref}
-        className={`input-field ${error ? 'input-error' : ''}`}
+    <div className={`input-group ${className}`}>
+      {label && <label htmlFor={selectId} className="input-label">{label}</label>}
+      <select
+        id={selectId}
+        className={`select-field ${error ? 'input-error' : ''}`}
         {...props}
       >
-        <option value="" disabled>Select an option</option>
+        <option value="" disabled>{placeholder}</option>
         {options.map((opt) => (
-          <option key={opt.value} value={opt.value}>{opt.label}</option>
+          <option key={opt.value} value={opt.value}>
+            {opt.label}
+          </option>
         ))}
       </select>
       {error && <span className="input-error-msg">{error}</span>}
     </div>
   );
-});
+};
