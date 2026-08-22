@@ -1,18 +1,24 @@
-# ─── Build stage (Maven + JDK 21 bundled) ────────────────────────────────────
-FROM maven:3.9-eclipse-temurin-21-alpine AS build
+# ─── Build stage — uses Maven wrapper to ensure mvn is always available ──────
+FROM eclipse-temurin:21-jdk-alpine AS build
+
+# Install Maven explicitly via apk (most reliable approach on alpine)
+RUN apk add --no-cache maven
+
 WORKDIR /workspace
 
-# Copy pom.xml first — Maven dependency layer caches here
+# Copy pom.xml first — dependency layer is cached separately
 COPY pom.xml .
-RUN mvn dependency:go-offline -B --no-transfer-progress
+RUN mvn dependency:go-offline -B -q
 
-# Copy source (migrations are bundled in src/main/resources/db/migration)
+# Copy Maven wrapper and source
+COPY .mvn .mvn
+COPY mvnw .
 COPY src ./src
 
-# Build the JAR
-RUN mvn package -DskipTests -B --no-transfer-progress
+# Build the JAR (migrations are packaged inside via classpath)
+RUN mvn package -DskipTests -B -q
 
-# ─── Runtime stage (JRE only — smaller image) ────────────────────────────────
+# ─── Runtime stage — slim JRE only ───────────────────────────────────────────
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
