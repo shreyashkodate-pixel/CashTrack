@@ -3,6 +3,7 @@ import { useCategories } from '../hooks/useCategories';
 import { Button } from '../components/common/Button';
 import { Skeleton } from '../components/common/Skeleton';
 import { EmptyState } from '../components/common/EmptyState';
+import { ErrorState } from '../components/common/ErrorState';
 import { CategoryForm } from '../components/category/CategoryForm';
 import { useAppContext } from '../context/AppContext';
 import { categoryService } from '../services/categoryService';
@@ -10,7 +11,7 @@ import { Plus, Edit2, Trash2, Tags, Tag } from 'lucide-react';
 import './Categories.css';
 
 export const Categories = () => {
-  const { categories, loading, refetch } = useCategories();
+  const { categories, loading, error, refetch } = useCategories();
   const { addToast } = useAppContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState(null);
@@ -54,7 +55,14 @@ export const Categories = () => {
         </Button>
       </header>
 
-      {loading ? (
+      {error ? (
+        <ErrorState 
+          title="Connection to server failed"
+          description="Could not fetch categories. Please verify your Render backend configuration, CORS allowed origins, and database credentials."
+          error={error}
+          onRetry={refetch}
+        />
+      ) : loading ? (
         <div className="categories-grid">
           {Array.from({ length: 6 }).map((_, i) => (
             <div key={i} className="category-card skeleton-category-card">

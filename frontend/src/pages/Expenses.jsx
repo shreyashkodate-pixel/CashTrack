@@ -7,6 +7,7 @@ import { Input } from '../components/common/Input';
 import { Select } from '../components/common/Select';
 import { TableRowSkeleton } from '../components/common/Skeleton';
 import { EmptyState } from '../components/common/EmptyState';
+import { ErrorState } from '../components/common/ErrorState';
 import { ExpenseForm } from '../components/expense/ExpenseForm';
 import { useAppContext } from '../context/AppContext';
 import { expenseService } from '../services/expenseService';
@@ -15,7 +16,7 @@ import { format } from 'date-fns';
 import './Expenses.css';
 
 export const Expenses = () => {
-  const { expenses, loading, refetch } = useExpenses();
+  const { expenses, loading, error, refetch } = useExpenses();
   const { categories } = useCategories();
   const { addToast } = useAppContext();
 
@@ -148,76 +149,87 @@ export const Expenses = () => {
 
       {/* Expenses Table */}
       <Card className="table-card">
-        <div className="table-container">
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Title</th>
-                <th>Category</th>
-                <th className="text-right">Amount</th>
-                <th className="action-cell">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {loading ? (
-                <>
-                  <TableRowSkeleton columns={5} />
-                  <TableRowSkeleton columns={5} />
-                  <TableRowSkeleton columns={5} />
-                  <TableRowSkeleton columns={5} />
-                </>
-              ) : filteredExpenses.length > 0 ? (
-                filteredExpenses.map((expense) => (
-                  <tr key={expense.id}>
-                    <td>{format(new Date(expense.expenseDate), 'MMM dd, yyyy')}</td>
-                    <td className="font-medium">{expense.title}</td>
-                    <td>
-                      <span className="delta-chip neutral">{expense.categoryName}</span>
-                    </td>
-                    <td className="text-right numeric">
-                      ₹{expense.amount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                    </td>
-                    <td className="action-cell">
-                      <button 
-                        className="icon-btn edit-btn" 
-                        onClick={() => handleEdit(expense)}
-                        title="Edit expense"
-                        aria-label="Edit expense"
-                      >
-                        <Edit2 size={16} />
-                      </button>
-                      <button 
-                        className="icon-btn delete-btn" 
-                        onClick={() => handleDelete(expense.id)}
-                        title="Delete expense"
-                        aria-label="Delete expense"
-                      >
-                        <Trash2 size={16} />
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              ) : null}
-            </tbody>
-          </table>
+        {error ? (
+          <div className="empty-state-wrapper">
+            <ErrorState 
+              title="Connection to server failed"
+              description="Could not fetch expenses. Please verify your Render backend configuration, CORS allowed origins, and database credentials."
+              error={error}
+              onRetry={refetch}
+            />
+          </div>
+        ) : (
+          <div className="table-container">
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Title</th>
+                  <th>Category</th>
+                  <th className="text-right">Amount</th>
+                  <th className="action-cell">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {loading ? (
+                  <>
+                    <TableRowSkeleton columns={5} />
+                    <TableRowSkeleton columns={5} />
+                    <TableRowSkeleton columns={5} />
+                    <TableRowSkeleton columns={5} />
+                  </>
+                ) : filteredExpenses.length > 0 ? (
+                  filteredExpenses.map((expense) => (
+                    <tr key={expense.id}>
+                      <td>{format(new Date(expense.expenseDate), 'MMM dd, yyyy')}</td>
+                      <td className="font-medium">{expense.title}</td>
+                      <td>
+                        <span className="delta-chip neutral">{expense.categoryName}</span>
+                      </td>
+                      <td className="text-right numeric">
+                        ₹{expense.amount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      </td>
+                      <td className="action-cell">
+                        <button 
+                          className="icon-btn edit-btn" 
+                          onClick={() => handleEdit(expense)}
+                          title="Edit expense"
+                          aria-label="Edit expense"
+                        >
+                          <Edit2 size={16} />
+                        </button>
+                        <button 
+                          className="icon-btn delete-btn" 
+                          onClick={() => handleDelete(expense.id)}
+                          title="Delete expense"
+                          aria-label="Delete expense"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : null}
+              </tbody>
+            </table>
 
-          {!loading && filteredExpenses.length === 0 && (
-            <div className="empty-state-wrapper">
-              <EmptyState 
-                icon={Receipt}
-                title={hasActiveFilters ? "No matching expenses" : "No expenses recorded"}
-                description={
-                  hasActiveFilters 
-                    ? "Try adjusting your filters or search query to find what you're looking for." 
-                    : "Get started by recording your first expense transaction."
-                }
-                actionLabel={hasActiveFilters ? "Clear Filters" : "Add First Expense"}
-                onAction={hasActiveFilters ? handleClearFilters : handleAdd}
-              />
-            </div>
-          )}
-        </div>
+            {!loading && filteredExpenses.length === 0 && (
+              <div className="empty-state-wrapper">
+                <EmptyState 
+                  icon={Receipt}
+                  title={hasActiveFilters ? "No matching expenses" : "No expenses recorded"}
+                  description={
+                    hasActiveFilters 
+                      ? "Try adjusting your filters or search query to find what you're looking for." 
+                      : "Get started by recording your first expense transaction."
+                  }
+                  actionLabel={hasActiveFilters ? "Clear Filters" : "Add First Expense"}
+                  onAction={hasActiveFilters ? handleClearFilters : handleAdd}
+                />
+              </div>
+            )}
+          </div>
+        )}
       </Card>
 
       <ExpenseForm 
