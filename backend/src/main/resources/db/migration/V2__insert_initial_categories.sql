@@ -5,5 +5,4 @@ INSERT INTO categories (name) VALUES
     ('Bills'),
     ('Health'),
     ('Entertainment'),
-    ('Other')
-ON CONFLICT (name) DO NOTHING;
+    ('Other');
