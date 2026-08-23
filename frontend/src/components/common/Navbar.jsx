@@ -1,10 +1,10 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import { Search, Sun, Moon, Bell } from 'lucide-react';
+import { Search, Sun, Moon, Bell, Menu } from 'lucide-react';
 import { useAppContext } from '../../context/AppContext';
 import './Navbar.css';
 
-export const Navbar = () => {
+export const Navbar = ({ onToggleSidebar }) => {
   const { theme, toggleTheme } = useAppContext();
   const location = useLocation();
 
@@ -24,6 +24,16 @@ export const Navbar = () => {
   return (
     <header className="navbar">
       <div className="navbar-left">
+        {/* Hamburger — visible on mobile only */}
+        <button
+          type="button"
+          className="navbar-hamburger"
+          onClick={onToggleSidebar}
+          aria-label="Open navigation menu"
+        >
+          <Menu size={20} />
+        </button>
+
         <div className="navbar-breadcrumb">
           <span>App</span>
           <span>/</span>
@@ -34,7 +44,7 @@ export const Navbar = () => {
       <div className="navbar-right">
         <button className="navbar-search-btn" type="button" aria-label="Global search">
           <Search size={14} />
-          <span>Quick search...</span>
+          <span className="navbar-search-text">Quick search...</span>
           <kbd className="kbd-shortcut">⌘K</kbd>
         </button>
 

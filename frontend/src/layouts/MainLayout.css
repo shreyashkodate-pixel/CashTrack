@@ -35,6 +35,14 @@
   height: 56px;
 }
 
+.sidebar-brand-wrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex: 1;
+  min-width: 0;
+}
+
 .sidebar-brand-icon {
   width: 32px;
   height: 32px;
@@ -179,4 +187,100 @@
 .main-content {
   flex: 1;
   width: 100%;
+}
+
+/* Mobile close button — hidden on desktop */
+.mobile-close-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  background: transparent;
+  border: none;
+  color: var(--muted-foreground);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background var(--dur-fast) var(--ease-out);
+}
+.mobile-close-btn:hover {
+  background-color: var(--muted);
+  color: var(--foreground);
+}
+
+/* Sidebar overlay backdrop — hidden on desktop */
+.sidebar-overlay {
+  display: none;
+}
+
+/* ── Mobile (≤ 768px) ─────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 280px;
+    transform: translateX(-100%);
+    transition: transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out);
+    z-index: 50;
+  }
+
+  .sidebar.mobile-open {
+    transform: translateX(0);
+    box-shadow: 4px 0 24px rgba(0,0,0,0.25);
+  }
+
+  /* Collapsed class has no effect on mobile — always full width */
+  .sidebar.collapsed {
+    width: 280px;
+  }
+  .sidebar.collapsed .sidebar-group-label,
+  .sidebar.collapsed .sidebar-brand-name,
+  .sidebar.collapsed .nav-link span,
+  .sidebar.collapsed .collapse-btn span {
+    display: revert;
+  }
+  .sidebar.collapsed .nav-link {
+    justify-content: flex-start;
+    padding: var(--space-2) var(--space-3);
+  }
+  .sidebar.collapsed .nav-link.active::before {
+    left: 0;
+  }
+  .sidebar.collapsed .collapse-btn {
+    justify-content: flex-start;
+    padding: var(--space-2) var(--space-3);
+  }
+
+  /* Show mobile close button inside sidebar */
+  .mobile-close-btn {
+    display: flex;
+  }
+
+  /* Show the overlay backdrop */
+  .sidebar-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px);
+    z-index: 49;
+    animation: fadeIn var(--dur-fast) var(--ease-out);
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* Hide desktop collapse button on mobile */
+  .sidebar-footer {
+    display: none;
+  }
+
+  .main-wrapper {
+    width: 100%;
+  }
 }

@@ -17,7 +17,7 @@
 .navbar-left {
   display: flex;
   align-items: center;
-  gap: var(--space-4);
+  gap: var(--space-3);
 }
 
 .navbar-breadcrumb {
@@ -102,4 +102,50 @@
   justify-content: center;
   cursor: pointer;
   box-shadow: var(--shadow-xs);
+}
+
+/* Hamburger — hidden on desktop, shown on mobile */
+.navbar-hamburger {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--muted-foreground);
+  cursor: pointer;
+  transition: all var(--dur-fast) var(--ease-out);
+}
+.navbar-hamburger:hover {
+  background-color: var(--muted);
+  color: var(--foreground);
+  border-color: var(--border);
+}
+
+/* ── Mobile (≤ 768px) ─────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0 var(--space-4);
+  }
+
+  .navbar-hamburger {
+    display: flex;
+  }
+
+  /* Hide search text + shortcut on mobile, just show icon */
+  .navbar-search-text,
+  .kbd-shortcut {
+    display: none;
+  }
+
+  .navbar-search-btn {
+    padding: 6px 10px;
+  }
+
+  /* Tighten right side gap on mobile */
+  .navbar-right {
+    gap: var(--space-2);
+  }
 }

@@ -204,3 +204,39 @@ a:hover {
     background-position: 200% 0;
   }
 }
+
+/* ── Mobile (≤ 768px) ─────────────────────────────────────────── */
+@media (max-width: 768px) {
+  h1, .h1-title {
+    font-size: 22px;
+    line-height: 28px;
+  }
+
+  h2, .h2-title {
+    font-size: 18px;
+    line-height: 24px;
+  }
+
+  .metric-value {
+    font-size: 24px;
+    line-height: 30px;
+  }
+
+  .page-container {
+    padding: var(--space-4) var(--space-4);
+    gap: var(--space-4);
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+  }
+}
+
+/* ── Small Mobile (≤ 480px) ──────────────────────────────────── */
+@media (max-width: 480px) {
+  .page-container {
+    padding: var(--space-3) var(--space-3);
+  }
+}

@@ -1,22 +1,50 @@
 import React, { useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
-import { LayoutDashboard, Receipt, Tags, ChevronLeft, ChevronRight, Wallet } from 'lucide-react';
+import { LayoutDashboard, Receipt, Tags, ChevronLeft, ChevronRight, Wallet, X } from 'lucide-react';
 import { Navbar } from '../components/common/Navbar';
 import { ToastContainer } from '../components/common/Toast';
 import './MainLayout.css';
 
 export const MainLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const toggleMobileSidebar = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
+  const closeMobileSidebar = () => {
+    setMobileOpen(false);
+  };
 
   return (
     <div className="layout-container">
-      <aside className={`sidebar ${collapsed ? 'collapsed' : ''}`} aria-label="Sidebar Navigation">
+      {/* Mobile Sidebar Overlay */}
+      {mobileOpen && (
+        <div 
+          className="sidebar-overlay" 
+          onClick={closeMobileSidebar} 
+          aria-hidden="true" 
+        />
+      )}
+
+      <aside className={`sidebar ${collapsed ? 'collapsed' : ''} ${mobileOpen ? 'mobile-open' : ''}`} aria-label="Sidebar Navigation">
         <div>
           <div className="sidebar-header">
-            <div className="sidebar-brand-icon" aria-hidden="true">
-              <Wallet size={18} />
+            <div className="sidebar-brand-wrapper">
+              <div className="sidebar-brand-icon" aria-hidden="true">
+                <Wallet size={18} />
+              </div>
+              <span className="sidebar-brand-name">CashTrack</span>
             </div>
-            <span className="sidebar-brand-name">CashTrack</span>
+            <button 
+              type="button" 
+              className="mobile-close-btn"
+              onClick={closeMobileSidebar}
+              aria-label="Close sidebar"
+            >
+              <X size={18} />
+            </button>
           </div>
 
           <nav className="sidebar-nav">
@@ -27,6 +55,7 @@ export const MainLayout = () => {
               className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} 
               end
               title="Dashboard"
+              onClick={closeMobileSidebar}
             >
               <LayoutDashboard size={18} />
               <span>Dashboard</span>
@@ -38,6 +67,7 @@ export const MainLayout = () => {
               to="/expenses" 
               className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
               title="Expenses"
+              onClick={closeMobileSidebar}
             >
               <Receipt size={18} />
               <span>Expenses</span>
@@ -47,6 +77,7 @@ export const MainLayout = () => {
               to="/categories" 
               className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
               title="Categories"
+              onClick={closeMobileSidebar}
             >
               <Tags size={18} />
               <span>Categories</span>
@@ -69,7 +100,7 @@ export const MainLayout = () => {
       </aside>
 
       <div className="main-wrapper">
-        <Navbar />
+        <Navbar onToggleSidebar={toggleMobileSidebar} />
         <main className="main-content">
           <Outlet />
         </main>
